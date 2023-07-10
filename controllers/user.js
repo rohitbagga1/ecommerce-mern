@@ -48,7 +48,6 @@ exports.signup = async (req, res) => {
 // };
 
 exports.signin = async (req, res) => {
-    
     try {
         let { email, password } = req.body;
         const user = await User.findOne({ email }).exec();
@@ -72,3 +71,7 @@ exports.signin = async (req, res) => {
     }
 };
 
+exports.signout = (req, res) => {
+    res.clearCookie("t");
+    res.json({ message: "Signout success" });
+};
