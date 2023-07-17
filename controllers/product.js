@@ -3,6 +3,7 @@ const _ = require("lodash");
 const fs = require("fs");
 const Product = require("../models/product");
 const { errorHandler } = require("../helpers/dbErrorHandler");
+const mongoose = require("mongoose");
 
 exports.productById = (req, res, next, id) => {
     Product.findById(id).exec().then((product)=>{
@@ -36,6 +37,13 @@ exports.create = (req, res) => {
                 error: "Image could not be uploaded"
             });
         }
+          // Convert array values to strings
+          for (let field in fields) {
+            if (Array.isArray(fields[field])) {
+                fields[field] = fields[field].join(',');
+            }
+        }
+        console.log(fields)
 
         // check for all fields
         const {
@@ -60,12 +68,7 @@ exports.create = (req, res) => {
             });
         }
         
-         // Convert array values to strings
-        for (let field in fields) {
-            if (Array.isArray(fields[field])) {
-                fields[field] = fields[field].join(',');
-            }
-        }
+       
         // console.log(fields);
         // return false;
         
@@ -90,3 +93,33 @@ exports.create = (req, res) => {
         });
     });
 };
+
+exports.remove = (req, res) => {
+    let product = req.product;
+    // if (product instanceof mongoose.Document) {
+    //     console.log('h');
+    //   } else {
+    //     console.log('y');
+    //   }
+    let productId = product._id.toString();
+    Product.deleteOne({ _id: productId }).then((result)=>{
+        res.json({
+            message: "Product deleted successfully"
+        });
+    }).catch((err)=>{
+        return res.status(400).json({
+            error: errorHandler(err)
+        });
+    });
+    // product.remove((err, deletedProduct) => {
+    //     if (err) {
+    //         return res.status(400).json({
+    //             error: errorHandler(err)
+    //         });
+    //     }
+    //     res.json({
+    //         message: "Product deleted successfully"
+    //     });
+    // });
+};
+
