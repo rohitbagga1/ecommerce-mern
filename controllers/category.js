@@ -18,3 +18,37 @@ exports.create = async (req, res) => {
         res.status(400).json({ error: errorHandler(err) });
       }
 };
+
+// exports.categoryById = (req, res, next, id) => {
+//   Category.findById(id).exec((err, category) => {
+//       if (err || !category) {
+//           return res.status(400).json({
+//               error: "Category does not exist"
+//           });
+//       }
+//       req.category = category;
+//       next();
+//   });
+// };
+
+exports.categoryById = (req, res, next, id) => {
+  Category.findById(id)
+   .then((category) => {
+      if (!category) {
+        return res.status(400).json({
+          error: "Category does not exist",
+        });
+      }
+      req.category = category;
+      next();
+    })
+   .catch((err) => {
+      return res.status(400).json({
+        error: "Error occurred while retrieving category",
+      });
+    });
+};
+
+exports.read = (req, res) => {
+  return res.json(req.category);
+};
