@@ -67,6 +67,7 @@ exports.update = (req, res) => {
   category.save()
  .then((data) => res.json(data))
  .catch((err) => {
+  console.log(err)
     return res.status(400).json({
       error: errorHandler(err),
     });
