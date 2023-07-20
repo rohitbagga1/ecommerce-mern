@@ -238,3 +238,15 @@ exports.listRelated = (req, res) => {
            });
        })
 };
+
+exports.listCategories = (req, res) => {
+    Product.distinct("category", {})
+       .then((categories) => {
+            res.json(categories);
+        })
+       .catch((err) => {
+            res.status(400).json({
+                error: "Categories not found"
+            });
+        });
+};
