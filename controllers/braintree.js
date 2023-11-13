@@ -38,9 +38,6 @@ exports.processPayment = (req, res) => {
             if (error) {
                 res.status(500).json(error);
             } else {
-                console.log(
-                    'cheching',result
-                )
                 res.json(result);
             }
         }
